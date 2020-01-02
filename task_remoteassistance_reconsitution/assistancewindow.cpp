@@ -39,7 +39,7 @@ DWIDGET_USE_NAMESPACE
 
 class AssistanceWindowPrivate: public QObject
 {
-    
+
 
 public:
     AssistanceWindowPrivate(AssistanceWindow *parent) : q_ptr(parent)
@@ -63,11 +63,6 @@ public:
         createConnectSlot();
         createConnectFailSlot();
         createConnectSuccessSlot();
-
-
-
-
-
     }
     ~ AssistanceWindowPrivate()
     {
@@ -75,7 +70,7 @@ public:
     }
     void initUI();//初始化
     void setBackground(const QPixmap &pixmap);
-    
+
 
 
 
@@ -86,7 +81,7 @@ public:
 
 
 
-    
+
     QWidget *createMainSlot();//主界面 按钮的布局和槽函数
     QWidget *createCopySlot();//复制成功界面 按钮的布局和槽函数
     QWidget *createInputSlot();//输入界面 按钮的布局和槽函数
@@ -95,8 +90,8 @@ public:
     QWidget *createConnectSlot();//连接界面 按钮的布局和槽函数
     QWidget *createConnectFailSlot();//连接失败界面 按钮的布局和槽函数
     QWidget *createConnectSuccessSlot();//连接成功界面 按钮的布局和槽函数
-    
-    
+
+
     //QStack<QWidget *> viewStack;
     QVBoxLayout *centralLayout      = Q_NULLPTR;//布局
     MainView *mainView               = Q_NULLPTR;//主界面
@@ -154,7 +149,7 @@ bool AssistanceWindow::eventFilter(QObject *target, QEvent *event)
 QWidget *AssistanceWindowPrivate::createMainSlot()
 {
     Q_Q(AssistanceWindow);
-    connect(mainView->iHelp,&DPushButton::clicked, q ,[ = ]() {
+    connect(mainView->iHelp, &DPushButton::clicked, q, [ = ]() {
 
         q->stackMainWindows->setCurrentWidget(waitCodeView);
         recordWidget = waitCodeView;
@@ -176,7 +171,7 @@ QWidget *AssistanceWindowPrivate::createMainSlot()
     });
 
 
-   connect(mainView->hHelp, &DPushButton::clicked, q, [ = ]() {
+    connect(mainView->hHelp, &DPushButton::clicked, q, [ = ]() {
         q->stackMainWindows->setCurrentWidget(inPutView);
         recordWidget = inPutView;
         setTitle(true, "帮助别人");
@@ -207,7 +202,7 @@ QWidget *AssistanceWindowPrivate::createCopySlot()
 QWidget *AssistanceWindowPrivate::createInputSlot()
 {
     Q_Q(AssistanceWindow);
-   connect(inPutView->m_bottPushBut, &DSuggestButton::clicked, q, [ = ]() {
+    connect(inPutView->m_bottPushBut, &DPushButton::clicked, q, [ = ]() {
 
         q->stackMainWindows->setCurrentWidget(mainView);
         recordWidget = mainView;
@@ -215,26 +210,27 @@ QWidget *AssistanceWindowPrivate::createInputSlot()
         inPutView->m_lineEdit->clear();
     });
 
-   connect(inPutView->m_timerFive, &QTimer::timeout, q, [ = ]() {
+    connect(inPutView->m_timerFive, &QTimer::timeout, q, [ = ]() {
 
-       if (!inPutView->m_lineEdit->text().compare(m_code)) {
-           q->stackMainWindows->setCurrentWidget(connectSuccessView);
-           recordWidget = connectSuccessView;
-           qDebug() << "createConnectAction success funButton";
-       } else {
-           q->stackMainWindows->setCurrentWidget(connectFailView);
-           recordWidget = connectFailView;
-           qDebug() << "createConnectAction fail funButton";
-       }
-       inPutView->m_timerFive->stop();
-   });
+        if (!inPutView->m_lineEdit->text().compare(m_code)) {
+            q->stackMainWindows->setCurrentWidget(connectSuccessView);
+            recordWidget = connectSuccessView;
+            qDebug() << "createConnectAction success funButton";
+        } else {
+            q->stackMainWindows->setCurrentWidget(connectFailView);
+            recordWidget = connectFailView;
+            qDebug() << "createConnectAction fail funButton";
+        }
+        inPutView->m_timerFive->stop();
+    });
 
 
     connect(inPutView->m_lineEdit, &QLineEdit::textChanged,
     [ = ]() {
 
-        QRegExp wx("[0-9]{1,6}");
-        QValidator *latitude = new QRegExpValidator(wx);
+        QRegExp vx("[0-9]{1,6}");
+        QRegExp wx(".{1,6}");
+        QRegExpValidator *latitude = new QRegExpValidator(wx, this);
         inPutView->m_lineEdit->setValidator(latitude);
         QString fullkey = inPutView->m_lineEdit->text();
         if (fullkey.length() == 6) {
@@ -245,23 +241,22 @@ QWidget *AssistanceWindowPrivate::createInputSlot()
         }
         QFont font;
         DPalette pe;
-        int pos = 6;
-        QRegExpValidator keyValidator(wx);
+        int pos = 10;
+        QRegExpValidator keyValidator(vx);
         bool keyValid = !((keyValidator.validate(fullkey, pos) != QValidator::Acceptable));
         bool flag = fullkey.isEmpty();
         if (!keyValid && !flag) {
-
             inPutView->m_wordLabel->setText("输入非法，可能是非数字");
             pe.setColor(DPalette::WindowText, Qt::red);
-             inPutView->m_wordLabel->setPalette(pe);
+            inPutView->m_wordLabel->setPalette(pe);
         } else {
-             inPutView->m_wordLabel->setText("请你输入协助别人的六位数字验证码，完成后点击开始协助对方");
+            inPutView->m_wordLabel->setText("请你输入协助别人的六位数字验证码，完成后点击开始协助对方");
             pe.setColor(DPalette::WindowText, Qt::gray);
-             inPutView->m_wordLabel->setPalette(pe);
+            inPutView->m_wordLabel->setPalette(pe);
         }
     });
 
-    connect(inPutView->m_topPushBut, &DSuggestButton::clicked, q, [ = ]() {
+    connect(inPutView->m_topPushBut, &DPushButton::clicked, q, [ = ]() {
         if (!inPutView->m_topPushBut->text().compare("连接")) {
             q->stackMainWindows->setCurrentWidget(connectView);
             recordWidget = connectView;
@@ -270,7 +265,7 @@ QWidget *AssistanceWindowPrivate::createInputSlot()
         } else {
             q->stackMainWindows->setCurrentWidget(mainView);
             recordWidget = connectView;
-             inPutView->m_lineEdit->clear();
+            inPutView->m_lineEdit->clear();
         }
 
     });
@@ -292,7 +287,7 @@ QWidget *AssistanceWindowPrivate::createWaitSlot()
 QWidget *AssistanceWindowPrivate::createDisolayCodeSlot()
 {
     Q_Q(AssistanceWindow);
-    connect(displayCodeView->m_bottPushBut, &DPushButton::clicked, q, [ = ]() {
+    connect(displayCodeView->m_topPushBut, &DPushButton::clicked, q, [ = ]() {
         QString pasteValue = copyText(displayCodeView->m_wordLabel);
         if (pasteValue != "") {
             q->stackMainWindows->setCurrentWidget(copyView);
@@ -303,6 +298,14 @@ QWidget *AssistanceWindowPrivate::createDisolayCodeSlot()
             qDebug() << "copy fail!";
         }
 
+    });
+
+    connect(displayCodeView->m_bottPushBut, &DPushButton::clicked, q, [ = ]() {
+
+        q->stackMainWindows->setCurrentWidget(mainView);
+        recordWidget = mainView;
+        setTitle(false, "远程协助");
+        inPutView->m_lineEdit->clear();
     });
 }
 
@@ -329,7 +332,7 @@ QWidget *AssistanceWindowPrivate::createConnectFailSlot()
 //        timerFive->start(5000);
         qDebug() << "createConnectAction success funButton";
     });
-    
+
 }
 
 QWidget *AssistanceWindowPrivate::createConnectSuccessSlot()
@@ -338,10 +341,10 @@ QWidget *AssistanceWindowPrivate::createConnectSuccessSlot()
     connect(connectSuccessView->m_bottPushBut, &DPushButton::clicked, q, [ = ]() {
         q->stackMainWindows->setCurrentWidget(mainView);
         recordWidget = mainView;
+        inPutView->m_lineEdit->clear();
         qDebug() << "createConnectSuccessAction funButton";
     });
 }
-
 
 
 QWidget *AssistanceWindowPrivate::wrapLayout(QLayout *layout)
@@ -351,7 +354,6 @@ QWidget *AssistanceWindowPrivate::wrapLayout(QLayout *layout)
     //wrapWidget->resize(200,200);
     return wrapWidget;
 }
-
 
 
 QString AssistanceWindowPrivate::copyText(QLabel *code)

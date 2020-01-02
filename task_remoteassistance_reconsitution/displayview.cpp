@@ -2,6 +2,7 @@
 
 DisplayView::DisplayView() :WidgetBase ()
 {
+    m_topPushBut = new QPushButton ();
     m_timer = new QTimer();
 }
 
@@ -25,10 +26,21 @@ QWidget *DisplayView::createDWidget()
     m_wordLabel->setAlignment(Qt::AlignHCenter);
 
     m_centralLayout->addWidget(m_wordLabel, 0, Qt::AlignCenter);
-    QString pushWord = "复制";
-    m_centralLayout->addWidget(createDPushButton(pushWord),0, Qt::AlignCenter);
+    m_centralLayout->addWidget(createDPushButton(),0, Qt::AlignCenter);
     return  wrapWidgetLayout(m_centralLayout);
 }
+
+QWidget *DisplayView::createDPushButton()
+{
+
+    m_bottPushBut->setText(QObject::tr("返回"));//operator BT
+    m_topPushBut->setText(QObject::tr("复制"));//operator BT
+    auto desktopAction = createActions({m_topPushBut, m_bottPushBut});
+    m_pushBuLayout->addWidget(desktopAction);
+    return wrapPushBottLayout(m_pushBuLayout);
+
+}
+
 
 
 

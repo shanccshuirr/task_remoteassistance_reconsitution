@@ -41,8 +41,8 @@ public:
     QTextEdit* m_textEdit  = nullptr;
     QLabel* m_wordLabel = nullptr;
     QLabel* m_pictureLabel = nullptr;
-    QPushButton* m_topPushBut = nullptr;
-    QPushButton* m_bottPushBut = nullptr;
+    DPushButton* m_topPushBut = nullptr;
+    DPushButton* m_bottPushBut = nullptr;
     QLineEdit* m_lineEdit = nullptr;
     QVBoxLayout* m_centralLayout = nullptr;
     QVBoxLayout* m_pushBuLayout = nullptr;

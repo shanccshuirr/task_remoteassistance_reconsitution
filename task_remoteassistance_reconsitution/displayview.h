@@ -8,6 +8,7 @@ class DisplayView : public WidgetBase
 public:
     DisplayView();
     virtual QWidget* createDWidget() override;
+    virtual QWidget* createDPushButton() ;
 
 };
 

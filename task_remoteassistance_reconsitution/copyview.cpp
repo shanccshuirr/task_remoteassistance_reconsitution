@@ -2,7 +2,7 @@
 
 CopyView::CopyView() : WidgetBase()
 {
-
+     m_timer = new QTimer();
 }
 
 QWidget *CopyView::createDWidget()

@@ -8,6 +8,7 @@ class CopyView : public WidgetBase
 public:
     CopyView();
     virtual QWidget* createDWidget() override;
+
 };
 
 #endif // COPYVIEW_H

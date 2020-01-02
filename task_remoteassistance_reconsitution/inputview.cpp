@@ -2,7 +2,7 @@
 
 InputView::InputView() : WidgetBase ()
 {
-   m_topPushBut = new QPushButton ();
+   m_topPushBut = new DPushButton ();
    m_lineEdit = new QLineEdit ();
    m_timerFive = new QTimer();
 }
